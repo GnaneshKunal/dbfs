@@ -36,6 +36,14 @@ AS_IF([test "x$enable_debug" = "xyes"], [
             CFLAGS='-g3 -O0 -fno-omit-frame-pointer -fno-optimize-sibling-calls -rdynamic -Wimplicit'
 ])
 
+dnl with asan
+AC_ARG_WITH([asan],
+    AS_HELP_STRING([--with-asan], [With address sanitizer]))
+
+AS_IF([test "x$with_asan" = "xyes"], [
+            CFLAGS+=' -fsanitize=address'
+])
+
 AC_CONFIG_FILES([Makefile
                  src/Makefile])
 AC_OUTPUT
