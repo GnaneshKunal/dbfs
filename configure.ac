@@ -24,6 +24,7 @@ AC_CHECK_HEADER_STDBOOL
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
+AC_TYPE_UINT32_T
 
 # Checks for library functions.
 AC_FUNC_MALLOC
@@ -45,5 +46,6 @@ AS_IF([test "x$with_asan" = "xyes"], [
 ])
 
 AC_CONFIG_FILES([Makefile
-                 src/Makefile])
+                 src/Makefile
+                 tests/Makefile])
 AC_OUTPUT
