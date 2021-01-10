@@ -79,12 +79,22 @@ ExecuteResult execute_insert(Statement *statement, Table *table);
 void print_row(Row *row);
 void serialize_row(Row *source, void *destination);
 void deserialize_row(void *source, Row *destination);
-void *row_slot(Table *table, uint32_t row_num);
 void *get_page(Pager *pager, uint32_t page_num);
 
 Pager *pager_open(const char *filename);
 void pager_flush(Pager *pager, uint32_t page_num, uint32_t size);
 Table *db_open(const char *filename);
 void db_close(Table *table);
+
+typedef struct {
+  Table *table;
+  uint32_t row_num;
+  bool end_of_table;            /* Indicates a position one past the last element */
+} Cursor;
+
+Cursor *table_start(Table *table);
+Cursor *table_end(Table *table);
+void* cursor_value(Cursor *cursor);
+void cursor_advance(Cursor *cursor);
 
 #endif
