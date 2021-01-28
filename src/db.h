@@ -60,11 +60,12 @@ typedef struct {
 typedef struct {
   int file_descriptor;
   uint32_t file_length;
+  uint32_t num_pages;
   void *pages[TABLE_MAX_PAGES];
 } Pager;
 
 typedef struct {
-  uint32_t num_rows;
+  uint32_t root_page_num;
   Pager *pager;
 } Table;
 
@@ -82,13 +83,14 @@ void deserialize_row(void *source, Row *destination);
 void *get_page(Pager *pager, uint32_t page_num);
 
 Pager *pager_open(const char *filename);
-void pager_flush(Pager *pager, uint32_t page_num, uint32_t size);
+void pager_flush(Pager *pager, uint32_t page_num);
 Table *db_open(const char *filename);
 void db_close(Table *table);
 
 typedef struct {
   Table *table;
-  uint32_t row_num;
+  uint32_t page_num;
+  uint32_t cell_num;
   bool end_of_table;            /* Indicates a position one past the last element */
 } Cursor;
 
@@ -97,4 +99,9 @@ Cursor *table_end(Table *table);
 void* cursor_value(Cursor *cursor);
 void cursor_advance(Cursor *cursor);
 
+void leaf_node_insert(Cursor *cursor, uint32_t key, Row *value);
+void print_constants(void);
+void print_leaf_node(void *node);
+
 #endif
+
