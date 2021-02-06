@@ -18,6 +18,7 @@ void close_input_buffer(InputBuffer *input_buffer);
 
 typedef enum {
   EXECUTE_SUCCESS,
+  EXECUTE_DUPLICATE_KEY,
   EXECUTE_TABLE_FULL,
 } ExecuteResult;
 
@@ -95,11 +96,16 @@ typedef struct {
 } Cursor;
 
 Cursor *table_start(Table *table);
-Cursor *table_end(Table *table);
+Cursor *table_find(Table *table, uint32_t key);
 void* cursor_value(Cursor *cursor);
 void cursor_advance(Cursor *cursor);
 
+typedef enum { NODE_INTERNAL, NODE_LEAF } NodeType;
+
 void leaf_node_insert(Cursor *cursor, uint32_t key, Row *value);
+Cursor *leaf_node_find(Table *table, uint32_t page_num, uint32_t key);
+NodeType get_node_type(void *node);
+void set_node_type(void *node, NodeType type);
 void print_constants(void);
 void print_leaf_node(void *node);
 
